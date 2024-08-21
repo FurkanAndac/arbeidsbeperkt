@@ -87,17 +87,20 @@
                   @click.stop="toggleFavorite(item)"
                   class="focus:outline-none"
                 >
-                  <!-- SVG icon for favorites -->
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                     width="24"
                     height="24"
+                    :class="{
+                      'text-yellow-500': favoriteItems.has(item._id),
+                      'text-gray-500': !favoriteItems.has(item._id),
+                    }"
                   >
                     <path
                       fill-rule="evenodd"
-                      d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                      d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
                       clip-rule="evenodd"
                     />
                   </svg>
@@ -200,8 +203,6 @@
 import { ref, computed, onMounted } from "vue";
 import { Clerk } from "@clerk/clerk-js";
 import axios from "axios";
-import { useStore } from "@nanostores/vue";
-import { $authStore } from "@clerk/astro/client";
 
 export default {
   setup() {
@@ -211,25 +212,45 @@ export default {
     const user = ref(null);
     const favoriteItems = ref(new Set());
 
+    const searchQuery = ref("");
+    const selectedLocation = ref("");
+    const selectedNiveau = ref("");
+    const currentPage = ref(1);
+    const itemsPerPage = ref(20);
+    const items = ref([]);
+    const showModal = ref(false);
+    const selectedItem = ref(null);
+
+    const fetchFavorites = async () => {
+      if (!user.value) return;
+
+      try {
+        const idToken = await clerk.session.getToken();
+        const response = await axios.get(
+          `http://localhost:5000/api/favorites?userId=${user.value.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${idToken}`,
+            },
+          }
+        );
+        favoriteItems.value = new Set(response.data.entryIds.map((fav) => fav));
+        for (const entry of favoriteItems.value) {
+          // console.log("entry" + entry);
+        }
+      } catch (error) {
+        console.error("Error fetching favorites:", error);
+      }
+    };
+
     onMounted(async () => {
       await clerk.load();
-      const auth = useStore($authStore);
       user.value = clerk.user;
       isLoggedIn.value = !!clerk.user;
 
-      const session = clerk.session;
-      const idToken = await session.getToken();
-
-      // if (isLoggedIn.value) {
-      //   try {
-      //     const response = await axios.get(
-      //       `http://localhost:5000/api/favorites?userId=${idToken}`
-      //     );
-      //     favoriteItems.value = new Set(response.data.favorites);
-      //   } catch (error) {
-      //     console.error("Error fetching favorites:", error);
-      //   }
-      // }
+      if (isLoggedIn.value) {
+        await fetchFavorites();
+      }
 
       try {
         const response = await axios.get(
@@ -241,31 +262,29 @@ export default {
       }
     });
 
-    const searchQuery = ref("");
-    const selectedLocation = ref("");
-    const selectedNiveau = ref("");
-    const currentPage = ref(1);
-    const itemsPerPage = ref(20);
-    const items = ref([]);
-
     const toggleFavorite = async (item) => {
       try {
-        if (!user.value) {
+        if (!isLoggedIn.value) {
           throw new Error("User is not authenticated");
         }
 
-        const session = clerk.session;
-        const idToken = await session.getToken();
+        const idToken = await clerk.session.getToken();
 
-        await axios.post(
+        const response = await axios.post(
           "http://localhost:5000/api/toggle-favorite",
-          { itemId: item.id },
+          { userId: user.value.id, entryId: item._id },
           {
             headers: {
               Authorization: `Bearer ${idToken}`,
             },
           }
         );
+
+        if (response.data.message === "Favorite added") {
+          favoriteItems.value.add(item._id);
+        } else if (response.data.message === "Favorite removed") {
+          favoriteItems.value.delete(item._id);
+        }
       } catch (error) {
         console.error("Error toggling favorite:", error);
       }
@@ -282,8 +301,20 @@ export default {
         : text;
     };
 
+    const sortedItems = computed(() => {
+      // console.log("itemsval" + items.value[0]);
+      const favoriteArray = items.value.filter(
+        (item) => favoriteItems.value.has(item._id)
+        // console.log(favoriteItems.value)
+      );
+      const nonFavoriteArray = items.value.filter(
+        (item) => !favoriteItems.value.has(item._id)
+      );
+      return [...favoriteArray, ...nonFavoriteArray];
+    });
+
     const filteredItems = computed(() => {
-      return items.value.filter((item) => {
+      return sortedItems.value.filter((item) => {
         const matchesSearchQuery =
           item.naamBedrijf
             .toLowerCase()
@@ -345,9 +376,6 @@ export default {
       selectedItem.value = null;
     };
 
-    const showModal = ref(false);
-    const selectedItem = ref(null);
-
     return {
       searchQuery,
       selectedLocation,
@@ -369,6 +397,7 @@ export default {
       isLoggedIn,
       truncateText,
       toggleFavorite,
+      favoriteItems,
     };
   },
 };
