@@ -185,6 +185,7 @@
 
 <script setup>
 import { ref } from "vue";
+require;
 
 const formData = ref({
   naamBedrijf: "",
@@ -204,7 +205,7 @@ const showAlert = ref(false); // Alert box visibility
 const handleSubmit = async () => {
   try {
     const response = await fetch(
-      "http://localhost:5000/api/add-to-wachtlijst",
+      import.meta.env.VITE_BACKEND_BASE_URL + "/api/add-to-wachtlijst",
       {
         method: "POST",
         headers: {

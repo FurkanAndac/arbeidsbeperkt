@@ -4,6 +4,7 @@
 
 <script>
 import axios from "axios";
+// require("dotenv").config();
 
 export default {
   data() {
@@ -13,8 +14,9 @@ export default {
   },
   async created() {
     try {
+      console.log(import.meta.env.VITE_BACKEND_BASE_URL);
       const response = await axios.get(
-        "http://localhost:5000/api/formulieren-count"
+        import.meta.env.VITE_BACKEND_BASE_URL + "/api/formulieren-count"
       ); // Adjust the URL if necessary
       this.count = response.data;
     } catch (error) {

@@ -227,7 +227,8 @@ export default {
       try {
         const idToken = await clerk.session.getToken();
         const response = await axios.get(
-          `http://localhost:5000/api/favorites?userId=${user.value.id}`,
+          import.meta.env.VITE_BACKEND_BASE_URL +
+            `/api/favorites?userId=${user.value.id}`,
           {
             headers: {
               Authorization: `Bearer ${idToken}`,
@@ -254,7 +255,7 @@ export default {
 
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/bedrijven-formulieren"
+          import.meta.env.VITE_BACKEND_BASE_URL + "/api/bedrijven-formulieren"
         );
         items.value = response.data;
       } catch (error) {
@@ -271,7 +272,7 @@ export default {
         const idToken = await clerk.session.getToken();
 
         const response = await axios.post(
-          "http://localhost:5000/api/toggle-favorite",
+          import.meta.env.VITE_BACKEND_BASE_URL + "/api/toggle-favorite",
           { userId: user.value.id, entryId: item._id },
           {
             headers: {

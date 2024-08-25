@@ -125,7 +125,8 @@ const opleidingenOptions = ["MBO", "HBO", "WO", "Geen"];
 const handleSubmit = async () => {
   try {
     const response = await fetch(
-      "http://localhost:5000/api/submit-arbeidsbeperkt-formulier",
+      import.meta.env.VITE_BACKEND_BASE_URL +
+        "/api/submit-arbeidsbeperkt-formulier",
       {
         method: "POST",
         headers: {
