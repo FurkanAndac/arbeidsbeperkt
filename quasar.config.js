@@ -28,6 +28,7 @@ module.exports = configure(function (/* ctx */) {
 
     env: {
       VITE_CLERK_PUBLISHABLE_KEY: process.env.VITE_CLERK_PUBLISHABLE_KEY,
+      VITE_BACKEND_BASE_URL: process.env.VITE_BACKEND_BASE_URL,
     },
 
     devServer: {
