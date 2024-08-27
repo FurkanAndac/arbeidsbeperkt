@@ -185,7 +185,6 @@
 
 <script setup>
 import { ref } from "vue";
-require;
 
 const formData = ref({
   naamBedrijf: "",
