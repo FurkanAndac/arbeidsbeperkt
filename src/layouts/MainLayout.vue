@@ -10,27 +10,24 @@
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
-
         <q-toolbar-title> Arbeidsbeperkt </q-toolbar-title>
-
-        <div><ArbeidsbeperktCounter /></div>
+        <div><ArbeidsbeperktCounter id="arbeidsbeperkt-counter-id" /></div>
       </q-toolbar>
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
         <q-item-label header> Menu </q-item-label>
-
         <EssentialLink
           v-for="link in filteredLinksList"
           :key="link.title"
+          :id="link.id"
           :title="link.title"
           :caption="link.caption"
           :icon="link.icon"
           :link="link.link"
           @click="handleLinkClick(link)"
         />
-
         <!-- Mailto Link at the bottom -->
         <q-item clickable @click="handleMailtoClick" class="q-mt-auto">
           <q-item-section>
@@ -45,6 +42,8 @@
 
     <q-page-container>
       <router-view />
+      <!-- Add the Wizard component here -->
+      <Wizard />
     </q-page-container>
   </q-layout>
 </template>
@@ -55,6 +54,9 @@ import { Clerk } from "@clerk/clerk-js";
 import ArbeidsbeperktCounter from "components/ArbeidsbeperktCounter.vue";
 import EssentialLink from "components/EssentialLink.vue";
 import { useRouter, useRoute } from "vue-router";
+import Wizard from "src/components/FormWizard.vue"; // Import the Wizard component
+import introJs from "intro.js";
+import "intro.js/introjs.css"; // Import Intro.js styles
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 const clerk = new Clerk(clerkPubKey);
@@ -77,6 +79,15 @@ watch(isAuthenticated, (authenticated) => {
 onMounted(async () => {
   await clerk.load();
   user.value = clerk.user;
+
+  // Check local storage and start Intro.js if not seen before
+  // const firstTourSeen = localStorage.getItem("firstTourSeen");
+  // const secondTourSeen = localStorage.getItem("secondTourSeen");
+  // if (!firstTourSeen) {
+  //   startFirstTour();
+  // } else if (!secondTourSeen) {
+  //   startSecondTour();
+  // }
 });
 
 function toggleLeftDrawer() {
@@ -106,35 +117,40 @@ function handleLinkClick(link) {
 }
 
 function handleMailtoClick() {
-  window.location.href = "mailto:support@example.com"; // Replace with your email address
+  window.location.href = "mailto:furkan.andac@hotmail.com"; // Replace with your email address
 }
 
 const linksList = [
   {
+    id: "home-link", // Unique ID for this link
     title: "Thuis pagina",
     caption: "Thuis pagina!",
     icon: "home",
     link: "/",
   },
   {
+    id: "bedrijven-registratie-link", // Unique ID for this link
     title: "Bedrijven registratie",
     caption: "Registreer hier uw bedrijf!",
     icon: "assignment",
     link: "/bedrijven-registratieformulier",
   },
   {
+    id: "arbeidsbeperkte-link", // Unique ID for this link
     title: "Arbeidsbeperkte",
     caption: "Heeft u een passende functie gevonden?",
     icon: "assignment",
     link: "/arbeidsbeperkte-formulier",
   },
   {
+    id: "linkedin-link", // Unique ID for this link
     title: "LinkedIn",
     caption: "Connect met ons op LinkedIn!",
     icon: "link",
     link: "https://twitter.quasar.dev",
   },
   {
+    id: "login-link", // Unique ID for this link
     title: "Login",
     caption: "",
     icon: "login", // Default icon for login
@@ -164,4 +180,95 @@ const filteredLinksList = computed(() => {
       return link;
     });
 });
+
+// function startFirstTour() {
+//   const intro = introJs().setOptions({
+//     steps: [
+//       {
+//         element: "#bedrijven-registratie-link", // Target the specific link
+//         intro: "This is the Bedrijven registratie section.",
+//         position: "right", // Position of the popover
+//       },
+//       {
+//         element: "#bedrijf-form", // Target the specific link
+//         intro: "This is the Bedrijven registratie section.",
+//         position: "right", // Position of the popover
+//       },
+//       // Define more steps as needed
+//     ],
+//     showStepNumbers: true, // Optionally show step numbers
+//   });
+
+//   // Start the tour
+//   intro.start();
+//   intro.setDontShowAgain(true);
+
+//   // Handle step changes
+//   intro.onchange((targetElement) => {
+//     console.log(targetElement);
+//     setTimeout(1000);
+//     if (targetElement.matches("#bedrijven-registratie-link")) {
+//       try {
+//         console.log(targetElement);
+//         // targetElement.preventDefault();
+//         router.push("/bedrijven-registratieformulier");
+//       } catch (error) {
+//         console.error("Failed to navigate:", error);
+//       }
+//     }
+
+//     if (targetElement.matches("#arbeidsbeperkte-link")) {
+//       try {
+//         console.log(targetElement);
+//         console.log(document.querySelector("#arbeidsbeperkte-link"));
+//         // targetElement.preventDefault();
+//         router.push("/arbeidsbeperkte-formulier");
+//       } catch (error) {
+//         console.error("Failed to navigate:", error);
+//       }
+//     }
+//   });
+
+//   intro.oncomplete(() => {
+//     finishWizard("firstTourSeen");
+//     router.push("/");
+//     setTimeout(() => {
+//       startSecondTour();
+//     }, 1000); // Start the second tour when the first one completes
+//   });
+// }
+
+// function startSecondTour() {
+//   const intro = introJs().setOptions({
+//     steps: [
+//       {
+//         element: window.document.getElementById("arbeidsbeperkte-link"),
+//         intro: "This is the first step of the second tour.",
+//         position: "top",
+//       },
+//       {
+//         element: "#step2-second-tour",
+//         intro: "This is the second step of the second tour.",
+//         position: "bottom",
+//       },
+//     ],
+//     showStepNumbers: true,
+//   });
+
+//   intro.start();
+//   intro.setDontShowAgain(true);
+
+//   intro.oncomplete(() => {
+//     finishWizard("secondTourSeen");
+//     // You can add more actions here if needed, like redirecting the user.
+//   });
+// }
+
+// function finishWizard(tourName) {
+//   localStorage.setItem(tourName, "true");
+// }
 </script>
+
+<style scoped>
+/* Add styles if needed */
+</style>

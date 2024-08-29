@@ -1,11 +1,14 @@
 <template>
   <div class="p-4 max-w-lg mx-auto">
-    <form @submit.prevent="handleSubmit">
+    <form @submit.prevent="handleSubmit" id="bedrijf-form">
       <!-- Naam Bedrijf -->
       <div class="mb-4">
-        <label for="naamBedrijf" class="block text-sm font-medium text-gray-700"
-          >Naam Bedrijf</label
+        <label
+          for="naamBedrijf"
+          class="block text-sm font-medium text-gray-700"
         >
+          Naam Bedrijf
+        </label>
         <input
           id="naamBedrijf"
           v-model="formData.naamBedrijf"
@@ -21,8 +24,9 @@
         <label
           for="omschrijving"
           class="block text-sm font-medium text-gray-700"
-          >Omschrijving bedrijf</label
         >
+          Omschrijving bedrijf
+        </label>
         <input
           id="omschrijving"
           v-model="formData.omschrijving"
@@ -39,8 +43,9 @@
         <label
           for="naamContactpersoon"
           class="block text-sm font-medium text-gray-700"
-          >Naam Contactpersoon</label
         >
+          Naam Contactpersoon
+        </label>
         <input
           id="naamContactpersoon"
           v-model="formData.naamContactpersoon"
@@ -53,9 +58,9 @@
 
       <!-- Gezocht Niveau -->
       <div class="mb-4">
-        <label for="niveau" class="block text-sm font-medium text-gray-700"
-          >Gezocht Niveau</label
-        >
+        <label for="niveau" class="block text-sm font-medium text-gray-700">
+          Gezocht Niveau
+        </label>
         <select
           id="niveau"
           v-model="formData.niveau"
@@ -76,9 +81,9 @@
 
       <!-- Adres -->
       <div class="mb-4">
-        <label for="adres" class="block text-sm font-medium text-gray-700"
-          >Adres</label
-        >
+        <label for="adres" class="block text-sm font-medium text-gray-700">
+          Adres
+        </label>
         <input
           id="adres"
           v-model="formData.adres"
@@ -91,9 +96,9 @@
 
       <!-- Stad -->
       <div class="mb-4">
-        <label for="stad" class="block text-sm font-medium text-gray-700"
-          >Stad</label
-        >
+        <label for="stad" class="block text-sm font-medium text-gray-700">
+          Stad
+        </label>
         <input
           id="stad"
           v-model="formData.stad"
@@ -106,9 +111,9 @@
 
       <!-- Provincie -->
       <div class="mb-4">
-        <label for="provincie" class="block text-sm font-medium text-gray-700"
-          >Provincie</label
-        >
+        <label for="provincie" class="block text-sm font-medium text-gray-700">
+          Provincie
+        </label>
         <select
           id="provincie"
           v-model="formData.provincie"
@@ -136,8 +141,9 @@
         <label
           for="telefoonnummer"
           class="block text-sm font-medium text-gray-700"
-          >Telefoonnummer</label
         >
+          Telefoonnummer
+        </label>
         <input
           id="telefoonnummer"
           v-model="formData.telefoonnummer"
@@ -150,9 +156,9 @@
 
       <!-- E-mail -->
       <div class="mb-4">
-        <label for="email" class="block text-sm font-medium text-gray-700"
-          >E-mail</label
-        >
+        <label for="email" class="block text-sm font-medium text-gray-700">
+          E-mail
+        </label>
         <input
           id="email"
           v-model="formData.email"
@@ -165,6 +171,7 @@
 
       <!-- Submit Button -->
       <button
+        id="submit-button"
         type="submit"
         class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
       >

@@ -1,6 +1,5 @@
-<!-- src/components/EssentialLink.vue -->
 <template>
-  <q-item :to="computedLink" exact>
+  <q-item :id="id" :to="computedLink" exact>
     <q-item-section>
       <q-item-label>{{ title }}</q-item-label>
       <q-item-label caption>{{ caption }}</q-item-label>
@@ -20,6 +19,7 @@ const props = defineProps({
   caption: String,
   icon: String,
   link: [String, Object], // Accept both string and object types for `link`
+  id: String, // Add id prop for unique identification
 });
 
 const router = useRouter();
@@ -33,3 +33,7 @@ const computedLink = computed(() => {
   return props.link;
 });
 </script>
+
+<style scoped>
+/* Add styles if needed */
+</style>
