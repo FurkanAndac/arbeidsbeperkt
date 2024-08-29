@@ -14,7 +14,7 @@ export default {
   },
   async created() {
     try {
-      console.log(import.meta.env.VITE_BACKEND_BASE_URL);
+      // console.log(import.meta.env.VITE_BACKEND_BASE_URL);
       const response = await axios.get(
         import.meta.env.VITE_BACKEND_BASE_URL + "/api/formulieren-count"
       ); // Adjust the URL if necessary

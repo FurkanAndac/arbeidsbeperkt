@@ -22,12 +22,12 @@ const clerk = new Clerk(clerkPubKey);
 const user = ref(null);
 
 onMounted(async () => {
-  console.log(clerk);
+  // console.log(clerk);
   await clerk.load();
 
   if (clerk.user) {
     user.value = clerk.user;
-    console.log(clerk.user);
+    // console.log(clerk.user);
     // clerk.mountUserButton(userButtonRef.value);
   } else {
     clerk.mountSignIn(signInRef.value);

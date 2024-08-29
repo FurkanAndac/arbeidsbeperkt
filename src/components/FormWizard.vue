@@ -1,6 +1,6 @@
 <template>
   <div v-if="isVisible" class="wizard">
-    <!-- Optionally include basic navigation if desired -->
+    <!-- Optioneel basisnavigatie opnemen als gewenst -->
     <!-- <div class="wizard-navigation">
       <button @click="prevStep" :disabled="currentStepIndex === 0">
         Previous
@@ -18,10 +18,16 @@
 
 <script setup>
 import { ref, onMounted, nextTick } from "vue";
+import { Clerk } from "@clerk/clerk-js";
 import introJs from "intro.js";
 import "intro.js/introjs.css"; // Import Intro.js styles
 import { useRouter } from "vue-router";
 
+// Clerk configureren met je public key
+const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const clerk = new Clerk(clerkPubKey);
+
+// Een ref om te controleren of de wizard zichtbaar moet zijn
 const isVisible = ref(false);
 const router = useRouter();
 
@@ -31,14 +37,9 @@ const startIntroJs = () => {
       {
         element: "#bedrijven-registratie-link",
         intro:
-          "Welkom! Ben jij onderdeel van een bedrijf die inclusiviteit hoog heeft staan? Hier kun je jouw bedrijfsgegevens invullen. Dit is het startpunt om jouw bedrijf op de kaart te zetten. Laten we beginnen!",
+          "Welkom! Ben jij onderdeel van een bedrijf dat inclusiviteit hoog heeft staan? Hier kun je jouw bedrijfsgegevens invullen. Dit is het startpunt om jouw bedrijf op de kaart te zetten. Laten we beginnen!",
         position: "right",
       },
-      // {
-      //   element: "#bedrijf-form",
-      //   intro: "This is the Bedrijven registratie form.",
-      //   position: "right",
-      // },
       {
         element: "#arbeidsbeperkte-link",
         intro:
@@ -53,27 +54,23 @@ const startIntroJs = () => {
       },
     ],
     showStepNumbers: true,
-    floatingElement: true, // Enable floating element feature
+    floatingElement: true, // Floating element feature inschakelen
   });
 
   intro.start();
 
-  // Refresh the tour to handle dynamic content
-  // intro.onbeforechange(() => {
-  //   intro.refresh(); // Ensure elements are correctly positioned
-  // });
-
+  // Voeg eventueel andere Intro.js events hier toe
   intro.onchange((targetElement) => {
-    console.log("Current step:", intro._currentStep);
-    console.log(targetElement);
-    // Adding delay to ensure element is highlighted correctly
+    // console.log("Current step:", intro._currentStep);
+    // console.log(targetElement);
+    // Vertraging toevoegen om ervoor te zorgen dat het element correct wordt gemarkeerd
     setTimeout(() => {
       if (targetElement.matches("#bedrijven-registratie-link")) {
         router.push("/bedrijven-registratieformulier");
       } else if (targetElement.matches("#arbeidsbeperkte-link")) {
         router.push("/arbeidsbeperkte-formulier");
       }
-    }, 500); // Adjust delay if needed
+    }, 500); // Pas vertraging aan indien nodig
   });
 
   intro.oncomplete(() => {
@@ -87,11 +84,17 @@ const finishWizard = () => {
 };
 
 onMounted(async () => {
-  await nextTick(); // Ensure DOM updates are complete
+  await clerk.load();
+
+  await nextTick(); // Zorg ervoor dat DOM-updates voltooid zijn
+
+  // Check of de gebruiker is ingelogd
+  const isLoggedIn = clerk.user;
   const wizardSeen = localStorage.getItem("wizardSeen");
-  if (!wizardSeen) {
+
+  if (isLoggedIn && !wizardSeen) {
     isVisible.value = true;
-    setTimeout(() => startIntroJs(), 3000); // Delay execution of startIntroJs by 3000ms
+    setTimeout(() => startIntroJs(), 3000); // Uitvoering van startIntroJs met 3000ms vertraging
   }
 });
 </script>
