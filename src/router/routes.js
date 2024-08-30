@@ -12,6 +12,10 @@ const routes = [
         path: "arbeidsbeperkte-formulier",
         component: () => import("pages/ArbeidsbeperktRegistratieformulier.vue"),
       },
+      {
+        path: "onze-sponsors",
+        component: () => import("pages/OnzeSponsors.vue"),
+      },
     ],
   },
 

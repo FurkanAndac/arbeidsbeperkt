@@ -150,6 +150,20 @@ const linksList = [
     link: "https://twitter.quasar.dev",
   },
   {
+    id: "sponsors-link", // Unique ID for this link
+    title: "Onze sponsors",
+    caption: "Overzicht van onze sponsors",
+    icon: "face", // Default icon for login
+    link: "/onze-sponsors",
+  },
+  {
+    id: "doneer-link", // Unique ID for this link
+    title: "Doneer",
+    caption: "Doneer hier!",
+    icon: "money", // Default icon for login
+    link: "/",
+  },
+  {
     id: "login-link", // Unique ID for this link
     title: "Login",
     caption: "",

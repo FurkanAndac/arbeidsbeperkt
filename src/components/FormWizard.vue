@@ -37,13 +37,13 @@ const startIntroJs = () => {
       {
         element: "#bedrijven-registratie-link",
         intro:
-          "Welkom! Ben jij onderdeel van een bedrijf dat inclusiviteit hoog heeft staan? Hier kun je jouw bedrijfsgegevens invullen. Dit is het startpunt om jouw bedrijf op de kaart te zetten. Laten we beginnen!",
+          "Welkom! Ben jij HR-medewerker, bedrijfseigenaar, of contactpersoon binnen een organisatie die inclusiviteit hoog in het vaandel heeft staan? Hier kun je jouw bedrijfsgegevens invullen. Dit is het startpunt om jouw bedrijf op de kaart te zetten. Laten we beginnen!",
         position: "right",
       },
       {
         element: "#arbeidsbeperkte-link",
         intro:
-          "Geweldig! Als je een passende functie hebt gevonden, kun je hier het formulier invullen. Dit helpt ons om jou verder te begeleiden in je traject naar werk. Samen maken we het verschil!",
+          "Geweldig! Ben jij arbeidsbeperkt, jobcoach, of werkconsulent? Als je een passende functie hebt gevonden, kun je hier het formulier invullen. Dit helpt ons om jou verder te begeleiden in je traject naar werk. Samen maken we het verschil!",
         position: "right",
       },
       {
