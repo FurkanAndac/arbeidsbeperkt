@@ -192,6 +192,7 @@
 
 <script setup>
 import { ref } from "vue";
+import { Clerk } from "@clerk/clerk-js";
 
 const formData = ref({
   naamBedrijf: "",
@@ -208,8 +209,31 @@ const formData = ref({
 const niveausOptions = ["Ongeschoold", "MBO", "HBO", "WO"];
 const showAlert = ref(false); // Alert box visibility
 
+const user = ref(null);
+const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const clerk = new Clerk(clerkPubKey);
+
 const handleSubmit = async () => {
   try {
+    // Await Clerk to be fully loaded
+    await clerk.load();
+
+    // After Clerk is loaded, assign the user
+    user.value = clerk.user;
+
+    // Check if the user is logged in
+    if (!user.value) {
+      console.error("No user is logged in.");
+      return; // Optionally, show an error message or redirect to login
+    }
+
+    // Combine email address and form data into a single object
+    const payload = {
+      emailAddress: user.value.primaryEmailAddress.emailAddress,
+      formData: formData.value,
+    };
+
+    // Make the API request
     const response = await fetch(
       import.meta.env.VITE_BACKEND_BASE_URL + "/api/add-to-wachtlijst",
       {
@@ -217,7 +241,7 @@ const handleSubmit = async () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData.value),
+        body: JSON.stringify(payload),
       }
     );
 

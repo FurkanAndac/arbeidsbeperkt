@@ -105,6 +105,7 @@
 
 <script setup>
 import { ref } from "vue";
+import { Clerk } from "@clerk/clerk-js";
 
 // Reactive form data
 const formData = ref({
@@ -114,6 +115,9 @@ const formData = ref({
   bedrijf: "",
   leeftijd: "",
 });
+const user = ref(null);
+const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const clerk = new Clerk(clerkPubKey);
 
 // Alert state
 const showAlert = ref(false);
@@ -124,6 +128,25 @@ const opleidingenOptions = ["MBO", "HBO", "WO", "Geen"];
 // Handle form submission
 const handleSubmit = async () => {
   try {
+    // Ensure Clerk is loaded and user information is available before proceeding
+    await clerk.load();
+
+    // After Clerk is loaded, assign the user
+    user.value = clerk.user;
+
+    // Check if the user is logged in
+    if (!user.value) {
+      console.error("No user is logged in.");
+      return; // Optionally, show an error message or redirect to login
+    }
+
+    // Combine email address and form data into a single object
+    const payload = {
+      emailAddress: user.value.primaryEmailAddress.emailAddress,
+      formData: formData.value,
+    };
+
+    // Make the API request
     const response = await fetch(
       import.meta.env.VITE_BACKEND_BASE_URL +
         "/api/submit-arbeidsbeperkt-formulier",
@@ -132,7 +155,7 @@ const handleSubmit = async () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData.value),
+        body: JSON.stringify(payload), // Pass the combined object here
       }
     );
 
@@ -141,7 +164,9 @@ const handleSubmit = async () => {
     }
 
     const result = await response.json();
-    showAlert.value = true; // Show the alert on success
+
+    // Show the alert on success
+    showAlert.value = true;
 
     // Automatically hide the alert after 3 seconds
     setTimeout(() => {
@@ -149,6 +174,11 @@ const handleSubmit = async () => {
     }, 3000);
 
     console.log("Form submitted successfully:", result);
+
+    // Optionally, reset the form
+    Object.keys(formData.value).forEach((key) => {
+      formData.value[key] = Array.isArray(formData.value[key]) ? [] : "";
+    });
   } catch (error) {
     console.error("Failed to submit form:", error);
   }

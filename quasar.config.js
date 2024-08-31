@@ -58,8 +58,41 @@ module.exports = configure(function (/* ctx */) {
         browser: ["es2019", "edge88", "firefox78", "chrome87", "safari13.1"],
         node: "node20",
       },
+      // Setting HTTP headers including CSP
+      vueRouterMode: "history", // or 'hash'
+      env: process.env, // optional, for environment variables
+      devtool: "source-map", // or any other option suitable for your build
+      chainWebpack(chain) {
+        chain.module
+          .rule("eslint")
+          .pre()
+          .include.add(path.resolve(__dirname, "src"))
+          .end()
+          .use("eslint-loader")
+          .loader("eslint-loader");
+        // .options({ /* eslint options */ })
+      },
+      extendWebpack(cfg) {
+        cfg.plugins.push(
+          new webpack.DefinePlugin({
+            __CSP_HEADER__: JSON.stringify(
+              `
+                    default-src 'self';
+                    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://artistic-weevil-91.clerk.accounts.dev https://challenges.cloudflare.com;
+                    connect-src 'self' https://artistic-weevil-91.clerk.accounts.dev;
+                    img-src 'self' https://img.clerk.com;
+                    worker-src 'self' blob:;
+                    style-src 'self' 'unsafe-inline';
+                    frame-src 'self' https://challenges.cloudflare.com;
+                    form-action 'self';
+                  `.replace(/\n/g, "")
+            ),
+          })
+        );
+      },
 
-      vueRouterMode: "hash", // available values: 'hash', 'history'
+      // vueRouterMode: "hash", // available values: 'hash', 'history'
+
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,

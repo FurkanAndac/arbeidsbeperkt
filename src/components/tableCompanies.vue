@@ -66,22 +66,28 @@
               class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
               @click="openModal(item)"
             >
-              <td class="px-4 py-2">{{ item.naamBedrijf }}</td>
-              <td class="px-4 py-2">{{ truncateText(item.omschrijving) }}</td>
+              <td class="px-4 py-2">{{ item.formData.naamBedrijf }}</td>
+              <td class="px-4 py-2">
+                {{ truncateText(item.formData.omschrijving) }}
+              </td>
               <td class="px-4 py-2">
                 <span :class="{ blur: !isLoggedIn }">
                   {{
-                    isLoggedIn ? `📞 ${item.telefoonnummer}` : "📞 Verbergen"
+                    isLoggedIn
+                      ? `📞 ${item.formData.telefoonnummer}`
+                      : "📞 Verbergen"
                   }}
                 </span>
               </td>
               <td class="px-4 py-2">
                 <span :class="{ blur: !isLoggedIn }">
-                  {{ isLoggedIn ? `✉️ ${item.email}` : "✉️ Verbergen" }}
+                  {{
+                    isLoggedIn ? `✉️ ${item.formData.email}` : "✉️ Verbergen"
+                  }}
                 </span>
               </td>
-              <td class="px-4 py-2">{{ item.provincie }}</td>
-              <td class="px-4 py-2">{{ item.niveau }}</td>
+              <td class="px-4 py-2">{{ item.formData.provincie }}</td>
+              <td class="px-4 py-2">{{ item.formData.niveau }}</td>
               <td class="px-4 py-2 text-center">
                 <button
                   @click.stop="toggleFavorite(item)"
@@ -161,15 +167,20 @@
           class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md modal-content"
         >
           <h2 class="text-lg font-bold mb-4">Details</h2>
-          <p><strong>Bedrijf:</strong> {{ selectedItem.naamBedrijf }}</p>
-          <p><strong>Omschrijving:</strong> {{ selectedItem.omschrijving }}</p>
+          <p>
+            <strong>Bedrijf:</strong> {{ selectedItem.formData.naamBedrijf }}
+          </p>
+          <p>
+            <strong>Omschrijving:</strong>
+            {{ selectedItem.formData.omschrijving }}
+          </p>
           <p>
             <strong>Telefoonnummer:</strong>
             <span v-if="isLoggedIn">
               <a
-                :href="`tel:${selectedItem.telefoonnummer}`"
+                :href="`tel:${selectedItem.formData.telefoonnummer}`"
                 class="text-blue-500 hover:underline"
-                >{{ selectedItem.telefoonnummer }}</a
+                >{{ selectedItem.formData.telefoonnummer }}</a
               >
             </span>
             <span v-else> 📞 Verborgen </span>
@@ -178,15 +189,17 @@
             <strong>E-mail:</strong>
             <span v-if="isLoggedIn">
               <a
-                :href="`mailto:${selectedItem.email}`"
+                :href="`mailto:${selectedItem.formData.email}`"
                 class="text-blue-500 hover:underline"
-                >{{ selectedItem.email }}</a
+                >{{ selectedItem.formData.email }}</a
               >
             </span>
             <span v-else> ✉️ Verborgen </span>
           </p>
-          <p><strong>Provincie:</strong> {{ selectedItem.provincie }}</p>
-          <p><strong>Niveau:</strong> {{ selectedItem.niveau }}</p>
+          <p>
+            <strong>Provincie:</strong> {{ selectedItem.formData.provincie }}
+          </p>
+          <p><strong>Niveau:</strong> {{ selectedItem.formData.niveau }}</p>
           <button
             @click="closeModal"
             class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
@@ -292,7 +305,7 @@ export default {
     };
 
     const uniqueLocations = computed(() => [
-      ...new Set(items.value.map((item) => item.provincie)),
+      ...new Set(items.value.map((item) => item.formData.provincie)),
     ]);
 
     const truncateText = (text, maxLength = 50) => {
@@ -317,25 +330,27 @@ export default {
     const filteredItems = computed(() => {
       return sortedItems.value.filter((item) => {
         const matchesSearchQuery =
-          item.naamBedrijf
+          item.formData.naamBedrijf
             .toLowerCase()
             .includes(searchQuery.value.toLowerCase()) ||
-          item.omschrijving
+          item.formData.omschrijving
             .toLowerCase()
             .includes(searchQuery.value.toLowerCase()) ||
-          item.telefoonnummer.includes(searchQuery.value) ||
-          item.email.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-          item.provincie
+          item.formData.telefoonnummer.includes(searchQuery.value) ||
+          item.formData.email
+            .toLowerCase()
+            .includes(searchQuery.value.toLowerCase()) ||
+          item.formData.provincie
             .toLowerCase()
             .includes(searchQuery.value.toLowerCase());
 
         const matchesLocation =
           selectedLocation.value === "" ||
-          item.provincie === selectedLocation.value;
+          item.formData.provincie === selectedLocation.value;
 
         const matchesNiveau =
           selectedNiveau.value === "" ||
-          (item.niveau || []).includes(selectedNiveau.value);
+          (item.formData.niveau || []).includes(selectedNiveau.value);
 
         return matchesSearchQuery && matchesLocation && matchesNiveau;
       });
