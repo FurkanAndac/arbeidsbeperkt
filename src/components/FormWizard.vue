@@ -52,6 +52,24 @@ const startIntroJs = () => {
           "Hier zie je onze impact! Dit is de teller die aangeeft hoeveel arbeidsbeperkten we al hebben geholpen. We zijn trots op elke stap vooruit en jij kunt daar deel van uitmaken.",
         position: "left",
       },
+      {
+        element: "#E-mail-id",
+        intro:
+          "Heb je vragen over de app, wil je een bug rapporteren, samenwerken of heb je een geweldig idee om onze diensten te verbeteren? Stuur ons een e-mail! We staan altijd open voor feedback en horen graag van je. Laten we kijken hoe je ons kunt bereiken!",
+        position: "right",
+      },
+      {
+        element: "#sponsors-link",
+        intro:
+          "Welkom bij onze sponsorenpagina! Hier vind je de bedrijven en organisaties die ons steunen in het realiseren van onze missie. Van onze trotse gouden partners tot de onmisbare zilveren en bronzen supporters—iedereen draagt bij aan het maken van een verschil. Laten we eens kijken wie er allemaal achter ons staan!",
+        position: "right",
+      },
+      {
+        element: "#doneer-link",
+        intro:
+          "Wil je bijdragen aan onze missie? Elk bedrag, groot of klein, helpt ons enorm. Vanaf een donatie van 1000 euro word je bedrijf een sponsor en krijgt het een plek op onze sponsorspagina. Jouw steun maakt echt het verschil. Laten we eens kijken hoe je kunt doneren!",
+        position: "right",
+      },
     ],
     showStepNumbers: true,
     floatingElement: true, // Floating element feature inschakelen
@@ -69,6 +87,8 @@ const startIntroJs = () => {
         router.push("/bedrijven-registratieformulier");
       } else if (targetElement.matches("#arbeidsbeperkte-link")) {
         router.push("/arbeidsbeperkte-formulier");
+      } else if (targetElement.matches("#sponsors-link")) {
+        router.push("/onze-sponsors");
       }
     }, 500); // Pas vertraging aan indien nodig
   });

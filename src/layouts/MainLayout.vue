@@ -29,7 +29,12 @@
           @click="handleLinkClick(link)"
         />
         <!-- Mailto Link at the bottom -->
-        <q-item clickable @click="handleMailtoClick" class="q-mt-auto">
+        <q-item
+          clickable
+          @click="handleMailtoClick"
+          class="q-mt-auto"
+          id="E-mail-id"
+        >
           <q-item-section>
             <q-item-label class="text-blue-500">Email ons</q-item-label>
           </q-item-section>
@@ -142,13 +147,7 @@ const linksList = [
     icon: "assignment",
     link: "/arbeidsbeperkte-formulier",
   },
-  {
-    id: "linkedin-link", // Unique ID for this link
-    title: "LinkedIn",
-    caption: "Connect met ons op LinkedIn!",
-    icon: "link",
-    link: "https://twitter.quasar.dev",
-  },
+
   {
     id: "sponsors-link", // Unique ID for this link
     title: "Onze sponsors",
@@ -162,6 +161,13 @@ const linksList = [
     caption: "Doneer hier!",
     icon: "money", // Default icon for login
     link: "/",
+  },
+  {
+    id: "linkedin-link", // Unique ID for this link
+    title: "LinkedIn",
+    caption: "Connect met ons op LinkedIn!",
+    icon: "link",
+    link: "https://twitter.quasar.dev",
   },
   {
     id: "login-link", // Unique ID for this link
