@@ -16,6 +16,16 @@ const routes = [
         path: "onze-sponsors",
         component: () => import("pages/OnzeSponsors.vue"),
       },
+      {
+        path: "/gdpr",
+        name: "GDPRStatement",
+        component: () => import("pages/GDPRStatement.vue"),
+      },
+      {
+        path: "/cookie-policy",
+        name: "CookiePolicy",
+        component: () => import("pages/CookiePolicy.vue"),
+      },
     ],
   },
 
