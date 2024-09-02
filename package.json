@@ -20,6 +20,7 @@
     "@teamhanko/hanko-elements": "^1.0.0",
     "axios": "^1.7.3",
     "dotenv": "^16.4.5",
+    "firebase": "^10.13.1",
     "flowbite": "^2.5.1",
     "intro.js": "^8.0.0-beta.1",
     "quasar": "^2.16.0",

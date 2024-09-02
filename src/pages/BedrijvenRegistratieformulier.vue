@@ -192,7 +192,8 @@
 
 <script setup>
 import { ref } from "vue";
-import { Clerk } from "@clerk/clerk-js";
+import { auth } from "../boot/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 const formData = ref({
   naamBedrijf: "",
@@ -210,17 +211,14 @@ const niveausOptions = ["Ongeschoold", "MBO", "HBO", "WO"];
 const showAlert = ref(false); // Alert box visibility
 
 const user = ref(null);
-const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-const clerk = new Clerk(clerkPubKey);
+
+// Watch for changes in the authentication state
+onAuthStateChanged(auth, (firebaseUser) => {
+  user.value = firebaseUser;
+});
 
 const handleSubmit = async () => {
   try {
-    // Await Clerk to be fully loaded
-    await clerk.load();
-
-    // After Clerk is loaded, assign the user
-    user.value = clerk.user;
-
     // Check if the user is logged in
     if (!user.value) {
       console.error("No user is logged in.");
@@ -229,7 +227,7 @@ const handleSubmit = async () => {
 
     // Combine email address and form data into a single object
     const payload = {
-      emailAddress: user.value.primaryEmailAddress.emailAddress,
+      emailAddress: user.value.email,
       formData: formData.value,
     };
 

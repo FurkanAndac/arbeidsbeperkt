@@ -26,7 +26,28 @@ const routes = [
         name: "CookiePolicy",
         component: () => import("pages/CookiePolicy.vue"),
       },
+      {
+        path: "/doneer",
+        name: "Doneer",
+        component: () => import("pages/DoneerPage.vue"),
+      },
     ],
+  },
+  {
+    path: "/login",
+    component: () => import("layouts/LoginLayout.vue"),
+    children: [
+      {
+        path: "",
+        name: "Login",
+        component: () => import("pages/LoginPage.vue"),
+      },
+    ],
+  },
+  {
+    path: "/signup",
+    name: "SignUp",
+    component: () => import("pages/SignupPage.vue"),
   },
 
   // Always leave this as last one,

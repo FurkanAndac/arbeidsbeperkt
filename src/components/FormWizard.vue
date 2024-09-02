@@ -1,6 +1,6 @@
 <template>
   <div v-if="isVisible" class="wizard">
-    <!-- Optioneel basisnavigatie opnemen als gewenst -->
+    <!-- Optional base navigation, uncomment if needed -->
     <!-- <div class="wizard-navigation">
       <button @click="prevStep" :disabled="currentStepIndex === 0">
         Previous
@@ -18,16 +18,16 @@
 
 <script setup>
 import { ref, onMounted, nextTick } from "vue";
-import { Clerk } from "@clerk/clerk-js";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import introJs from "intro.js";
 import "intro.js/introjs.css"; // Import Intro.js styles
 import { useRouter } from "vue-router";
+import { app } from "../boot/firebase"; // Make sure you have this file with your Firebase configuration
 
-// Clerk configureren met je public key
-const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-const clerk = new Clerk(clerkPubKey);
+// Initialize Firebase
+app;
 
-// Een ref om te controleren of de wizard zichtbaar moet zijn
+const auth = getAuth();
 const isVisible = ref(false);
 const router = useRouter();
 
@@ -77,11 +77,11 @@ const startIntroJs = () => {
 
   intro.start();
 
-  // Voeg eventueel andere Intro.js events hier toe
+  // Add any additional Intro.js events here
   intro.onchange((targetElement) => {
     // console.log("Current step:", intro._currentStep);
     // console.log(targetElement);
-    // Vertraging toevoegen om ervoor te zorgen dat het element correct wordt gemarkeerd
+    // Add a delay to ensure the element is correctly highlighted
     setTimeout(() => {
       if (targetElement.matches("#bedrijven-registratie-link")) {
         router.push("/bedrijven-registratieformulier");
@@ -90,7 +90,7 @@ const startIntroJs = () => {
       } else if (targetElement.matches("#sponsors-link")) {
         router.push("/onze-sponsors");
       }
-    }, 500); // Pas vertraging aan indien nodig
+    }, 500); // Adjust delay if necessary
   });
 
   intro.oncomplete(() => {
@@ -104,18 +104,17 @@ const finishWizard = () => {
 };
 
 onMounted(async () => {
-  await clerk.load();
+  await nextTick(); // Ensure DOM updates are completed
 
-  await nextTick(); // Zorg ervoor dat DOM-updates voltooid zijn
+  // Check if the user is logged in
+  onAuthStateChanged(auth, (user) => {
+    const wizardSeen = localStorage.getItem("wizardSeen");
 
-  // Check of de gebruiker is ingelogd
-  const isLoggedIn = clerk.user;
-  const wizardSeen = localStorage.getItem("wizardSeen");
-
-  if (isLoggedIn && !wizardSeen) {
-    isVisible.value = true;
-    setTimeout(() => startIntroJs(), 3000); // Uitvoering van startIntroJs met 3000ms vertraging
-  }
+    if (user && !wizardSeen) {
+      isVisible.value = true;
+      setTimeout(() => startIntroJs(), 3000); // Start IntroJs with a 3000ms delay
+    }
+  });
 });
 </script>
 

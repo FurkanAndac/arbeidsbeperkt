@@ -1,9 +1,11 @@
 <template>
   <main>
-    <ClerkAuth />
+    <LoginPageComponent />
   </main>
 </template>
 
 <script setup>
-import ClerkAuth from "src/components/ClerkAuth.vue";
+import LoginPageComponent from "src/components/LoginPageComponent.vue";
 </script>
+
+<style></style>

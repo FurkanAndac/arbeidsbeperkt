@@ -214,13 +214,16 @@
 
 <script>
 import { ref, computed, onMounted } from "vue";
-import { Clerk } from "@clerk/clerk-js";
 import axios from "axios";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { app } from "../boot/firebase"; // Ensure you have this file with your Firebase configuration
+
+// Initialize Firebase
+app;
 
 export default {
   setup() {
-    const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-    const clerk = new Clerk(clerkPubKey);
+    const auth = getAuth();
     const isLoggedIn = ref(false);
     const user = ref(null);
     const favoriteItems = ref(new Set());
@@ -238,42 +241,50 @@ export default {
       if (!user.value) return;
 
       try {
-        const idToken = await clerk.session.getToken();
         const response = await axios.get(
-          import.meta.env.VITE_BACKEND_BASE_URL +
-            `/api/favorites?userId=${user.value.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${idToken}`,
-            },
-          }
+          `${import.meta.env.VITE_BACKEND_BASE_URL}/api/favorites?userId=${
+            user.value.uid
+          }`
         );
-        favoriteItems.value = new Set(response.data.entryIds.map((fav) => fav));
-        for (const entry of favoriteItems.value) {
-          // console.log("entry" + entry);
+
+        // Check if response.data is null or not an object
+        if (!response.data || typeof response.data !== "object") {
+          console.warn("No favorites data available or invalid data format.");
+          return; // Skip further processing
         }
+
+        // Check if response.data.entryIds exists and is an array
+        if (!Array.isArray(response.data.entryIds)) {
+          console.warn("Invalid favorites data format.");
+          return; // Skip further processing
+        }
+
+        // Update favoriteItems if the data is valid
+        favoriteItems.value = new Set(response.data.entryIds.map((fav) => fav));
       } catch (error) {
         console.error("Error fetching favorites:", error);
       }
     };
 
     onMounted(async () => {
-      await clerk.load();
-      user.value = clerk.user;
-      isLoggedIn.value = !!clerk.user;
+      onAuthStateChanged(auth, async (currentUser) => {
+        if (currentUser) {
+          user.value = currentUser;
+          isLoggedIn.value = true;
+          await fetchFavorites();
+        } else {
+          isLoggedIn.value = false;
+        }
 
-      if (isLoggedIn.value) {
-        await fetchFavorites();
-      }
-
-      try {
-        const response = await axios.get(
-          import.meta.env.VITE_BACKEND_BASE_URL + "/api/bedrijven-formulieren"
-        );
-        items.value = response.data;
-      } catch (error) {
-        console.error("Error fetching bedrijven formulieren:", error);
-      }
+        try {
+          const response = await axios.get(
+            import.meta.env.VITE_BACKEND_BASE_URL + "/api/bedrijven-formulieren"
+          );
+          items.value = response.data;
+        } catch (error) {
+          console.error("Error fetching bedrijven formulieren:", error);
+        }
+      });
     });
 
     const toggleFavorite = async (item) => {
@@ -281,17 +292,9 @@ export default {
         if (!isLoggedIn.value) {
           throw new Error("User is not authenticated");
         }
-
-        const idToken = await clerk.session.getToken();
-
         const response = await axios.post(
           import.meta.env.VITE_BACKEND_BASE_URL + "/api/toggle-favorite",
-          { userId: user.value.id, entryId: item._id },
-          {
-            headers: {
-              Authorization: `Bearer ${idToken}`,
-            },
-          }
+          { userId: user.value.uid, entryId: item._id }
         );
 
         if (response.data.message === "Favorite added") {
@@ -316,10 +319,8 @@ export default {
     };
 
     const sortedItems = computed(() => {
-      // console.log("itemsval" + items.value[0]);
-      const favoriteArray = items.value.filter(
-        (item) => favoriteItems.value.has(item._id)
-        // console.log(favoriteItems.value)
+      const favoriteArray = items.value.filter((item) =>
+        favoriteItems.value.has(item._id)
       );
       const nonFavoriteArray = items.value.filter(
         (item) => !favoriteItems.value.has(item._id)
