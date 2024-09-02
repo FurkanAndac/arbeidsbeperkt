@@ -51,7 +51,7 @@ import { ref } from "vue";
 
 // Define sponsors data
 const goldSponsors = ref([
-  { logo: "src/assets/sponsors/goud/AholdDelhaize.png" },
+  // { logo: "src/assets/sponsors/goud/AholdDelhaize.png" },
   // { logo: "/assets/sponsors/goud/sponsor2.svg" },
   // { logo: "/assets/sponsors/goud/sponsor3.svg" },
 ]);

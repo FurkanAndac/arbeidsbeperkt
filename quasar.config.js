@@ -73,24 +73,6 @@ module.exports = configure(function (/* ctx */) {
           .loader("eslint-loader");
         // .options({ /* eslint options */ })
       },
-      extendWebpack(cfg) {
-        cfg.plugins.push(
-          new webpack.DefinePlugin({
-            __CSP_HEADER__: JSON.stringify(
-              `
-                    default-src 'self';
-                    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://artistic-weevil-91.clerk.accounts.dev https://challenges.cloudflare.com;
-                    connect-src 'self' https://artistic-weevil-91.clerk.accounts.dev;
-                    img-src 'self' https://img.clerk.com;
-                    worker-src 'self' blob:;
-                    style-src 'self' 'unsafe-inline';
-                    frame-src 'self' https://challenges.cloudflare.com;
-                    form-action 'self';
-                  `.replace(/\n/g, "")
-            ),
-          })
-        );
-      },
 
       // vueRouterMode: "hash", // available values: 'hash', 'history'
 
