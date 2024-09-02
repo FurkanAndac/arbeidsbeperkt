@@ -10,7 +10,7 @@
         <p class="mt-2 text-center text-sm text-gray-600 max-w">
           Of
           <a
-            href="/login"
+            href="/authentication/login"
             class="font-medium text-blue-600 hover:text-blue-500"
           >
             login
@@ -127,7 +127,7 @@ export default {
             email.value,
             password.value
           );
-          router.push("/login"); // Redirect to the home page on success
+          router.push("/authentication/login"); // Redirect to the home page on success
         } else {
           errorMessage.value =
             "Wachtwoord en herhaal wachtwoord komt niet overeen";

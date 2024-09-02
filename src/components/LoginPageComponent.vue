@@ -10,7 +10,7 @@
         <p class="mt-2 text-center text-sm text-gray-600 max-w">
           Of
           <a
-            href="/signup"
+            href="/authentication/signup"
             class="font-medium text-blue-600 hover:text-blue-500"
           >
             registreer nu

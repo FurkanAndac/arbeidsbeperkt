@@ -17,37 +17,37 @@ const routes = [
         component: () => import("pages/OnzeSponsors.vue"),
       },
       {
-        path: "/gdpr",
+        path: "gdpr",
         name: "GDPRStatement",
         component: () => import("pages/GDPRStatement.vue"),
       },
       {
-        path: "/cookie-policy",
+        path: "cookie-policy",
         name: "CookiePolicy",
         component: () => import("pages/CookiePolicy.vue"),
       },
       {
-        path: "/doneer",
+        path: "doneer",
         name: "Doneer",
         component: () => import("pages/DoneerPage.vue"),
       },
     ],
   },
   {
-    path: "/login",
+    path: "/authentication",
     component: () => import("layouts/LoginLayout.vue"),
     children: [
       {
-        path: "",
+        path: "login",
         name: "Login",
         component: () => import("pages/LoginPage.vue"),
       },
+      {
+        path: "signup",
+        name: "Signup",
+        component: () => import("pages/SignupPage.vue"),
+      },
     ],
-  },
-  {
-    path: "/signup",
-    name: "Signup",
-    component: () => import("pages/SignupPage.vue"),
   },
 
   // Always leave this as last one,

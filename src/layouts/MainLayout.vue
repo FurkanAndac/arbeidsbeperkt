@@ -97,7 +97,7 @@ function toggleLeftDrawer() {
 }
 
 function openLoginPage() {
-  router.push("/login");
+  router.push("/authentication/login");
 }
 
 function handleAuthButtonClick() {
@@ -111,7 +111,7 @@ function handleAuthButtonClick() {
         console.error("Error signing out: ", error);
       });
   } else {
-    router.push("/login"); // Redirect to login page if not authenticated
+    router.push("/authentication/login"); // Redirect to login page if not authenticated
   }
 }
 
