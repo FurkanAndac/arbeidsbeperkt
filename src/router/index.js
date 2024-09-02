@@ -18,7 +18,7 @@ import routes from "./routes";
 
 export default route(function (/* { store, ssrContext } */) {
   const Router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     scrollBehavior: () => ({ left: 0, top: 0 }),
     routes,
 
