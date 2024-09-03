@@ -86,7 +86,7 @@
 
               <div class="text-sm">
                 <a
-                  href="#"
+                  href="/authentication/forgot-password"
                   class="font-medium text-blue-600 hover:text-blue-500"
                 >
                   Wachtwoord vergeten?
