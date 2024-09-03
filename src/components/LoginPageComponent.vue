@@ -1,8 +1,12 @@
 <template>
-  <main>
-    <div
-      class="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8"
-    >
+  <main
+    class="relative min-h-screen flex items-center justify-center bg-gray-100 py-12 sm:px-6 lg:px-8"
+  >
+    <!-- Animated Background -->
+    <AnimatedBackground class="absolute inset-0 z-0" />
+
+    <!-- Login form content -->
+    <div class="relative z-10 sm:mx-auto sm:w-full sm:max-w-md">
       <div class="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Log in met je account
@@ -120,25 +124,28 @@ import {
 } from "firebase/auth";
 import { auth } from "../boot/firebase"; // Adjust the path as needed
 import { useRouter } from "vue-router";
+import AnimatedBackground from "./animatedBackground.vue";
 
 export default {
   name: "LoginPageComponent",
+  components: {
+    AnimatedBackground,
+  },
   setup() {
     const email = ref("");
     const password = ref("");
-    const rememberMe = ref(false); // Ref for the "Onthoud me" checkbox
+    const rememberMe = ref(false);
     const errorMessage = ref("");
     const router = useRouter();
 
     const signIn = async () => {
       try {
-        // Set the persistence based on the "Onthoud me" checkbox
         await setPersistence(
           auth,
           rememberMe.value ? browserLocalPersistence : browserSessionPersistence
         );
         await signInWithEmailAndPassword(auth, email.value, password.value);
-        router.push("/"); // Redirect to the home page on success
+        router.push("/");
       } catch (error) {
         console.error("Error signing in:", error);
         errorMessage.value =
@@ -157,4 +164,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.main {
+  position: relative;
+  min-height: 100vh;
+}
+</style>

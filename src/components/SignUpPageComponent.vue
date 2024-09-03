@@ -1,8 +1,13 @@
 <template>
-  <main>
-    <div
-      class="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8"
-    >
+  <main
+    class="relative z-10 min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8"
+  >
+    <!-- Animated Background -->
+    <AnimatedBackground class="absolute inset-0 z-0" />
+
+    <!-- Signup Form -->
+
+    <div class="relative z-10 sm:mx-auto sm:w-full sm:max-w-md">
       <div class="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Registreer je account
@@ -108,9 +113,13 @@ import { ref } from "vue";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../boot/firebase"; // Adjust the path as needed
 import { useRouter } from "vue-router";
+import AnimatedBackground from "./animatedBackground.vue";
 
 export default {
   name: "SignUpPageComponent",
+  components: {
+    AnimatedBackground,
+  },
   setup() {
     const email = ref("");
     const password = ref("");
@@ -150,4 +159,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.main {
+  position: relative;
+  min-height: 100vh;
+}
+</style>
