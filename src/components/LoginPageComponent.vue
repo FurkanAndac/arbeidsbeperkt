@@ -16,22 +16,24 @@
           <a
             href="/authentication/signup"
             class="font-medium text-blue-600 hover:text-blue-500"
+            >registreer nu</a
           >
-            registreer nu
-          </a>
         </p>
       </div>
 
       <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <GoogleSignInButton />
+
+          <hr
+            style="border: none; border-top: 1px solid #000; margin: 20px 0"
+          />
+
           <form @submit.prevent="signIn" class="space-y-6">
             <div>
-              <label
-                for="email"
-                class="block text-sm font-medium text-gray-700"
+              <label for="email" class="block text-sm font-medium text-gray-700"
+                >Email adres</label
               >
-                Email adres
-              </label>
               <div class="mt-1">
                 <input
                   id="email"
@@ -50,9 +52,8 @@
               <label
                 for="password"
                 class="block text-sm font-medium text-gray-700"
+                >Wachtwoord</label
               >
-                Wachtwoord
-              </label>
               <div class="mt-1">
                 <input
                   id="password"
@@ -79,18 +80,16 @@
                 <label
                   for="remember_me"
                   class="ml-2 block text-sm text-gray-900"
+                  >Onthoud me</label
                 >
-                  Onthoud me
-                </label>
               </div>
 
               <div class="text-sm">
                 <a
                   href="/authentication/forgot-password"
                   class="font-medium text-blue-600 hover:text-blue-500"
+                  >Wachtwoord vergeten?</a
                 >
-                  Wachtwoord vergeten?
-                </a>
               </div>
             </div>
 
@@ -125,11 +124,13 @@ import {
 import { auth } from "../boot/firebase"; // Adjust the path as needed
 import { useRouter } from "vue-router";
 import AnimatedBackground from "./animatedBackground.vue";
+import GoogleSignInButton from "./GoogleSignInButton.vue";
 
 export default {
   name: "LoginPageComponent",
   components: {
     AnimatedBackground,
+    GoogleSignInButton,
   },
   setup() {
     const email = ref("");
