@@ -36,7 +36,7 @@
           id="E-mail-id"
         >
           <q-item-section>
-            <q-item-label class="text-blue-500">Email ons</q-item-label>
+            <q-item-label>Email ons</q-item-label>
           </q-item-section>
           <q-item-section side>
             <q-icon name="email" />
@@ -60,7 +60,7 @@
       </q-list>
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container class="custom-bg">
       <router-view />
       <!-- Add the Wizard component here -->
       <Wizard />
@@ -202,4 +202,7 @@ const filteredLinksList = computed(() => {
 
 <style scoped>
 /* Add styles if needed */
+.custom-bg {
+  background-color: #ffffff;
+}
 </style>

@@ -1,12 +1,6 @@
 <template>
-  <q-page class="flex flex-center">
-    <!-- <img
-      alt="Quasar logo"
-      src="~assets/quasar-logo-vertical.svg"
-      style="width: 200px; height: 200px"
-    > -->
+  <q-page class="flex flex-center custom-bg">
     <table-companies></table-companies>
-    <!-- <HankoAuth /> -->
   </q-page>
 </template>
 
@@ -18,3 +12,9 @@ defineOptions({
   name: "IndexPage",
 });
 </script>
+
+<style scoped>
+.custom-bg {
+  background-color: #ffffff; /* Replace with your preferred color */
+}
+</style>

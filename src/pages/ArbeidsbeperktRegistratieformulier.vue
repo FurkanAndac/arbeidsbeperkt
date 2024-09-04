@@ -1,6 +1,6 @@
 <template>
-  <div class="p-4 max-w-lg mx-auto">
-    <form @submit.prevent="handleSubmit">
+  <div class="container">
+    <form @submit.prevent="handleSubmit" class="form">
       <!-- Naam -->
       <div class="mb-4">
         <label for="naam" class="block text-sm font-medium text-gray-700"
@@ -11,7 +11,7 @@
           v-model="formData.naam"
           type="text"
           placeholder="Voer je naam in"
-          class="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          class="input"
           required
         />
       </div>
@@ -24,7 +24,7 @@
         <select
           id="opleiding"
           v-model="formData.hoogstgenotenOpleiding"
-          class="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          class="select"
           required
         >
           <option value="">Selecteer opleiding</option>
@@ -48,7 +48,7 @@
           v-model="formData.woonplaats"
           type="text"
           placeholder="Voer je woonplaats in"
-          class="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          class="input"
           required
         />
       </div>
@@ -63,7 +63,7 @@
           v-model="formData.bedrijf"
           type="text"
           placeholder="Voer het bedrijf in"
-          class="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          class="input"
           required
         />
       </div>
@@ -77,28 +77,18 @@
           id="leeftijd"
           v-model="formData.leeftijd"
           type="date"
-          class="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          class="input"
           required
         />
       </div>
 
       <!-- Submit Button -->
-      <button
-        type="submit"
-        class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-      >
-        Verstuur
-      </button>
+      <button type="submit" class="submit-button">Verstuur</button>
     </form>
 
     <!-- Alert -->
     <transition name="fade">
-      <div
-        v-if="showAlert"
-        class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded shadow-md"
-      >
-        Bedankt voor je tijd, verstuurd!
-      </div>
+      <div v-if="showAlert" class="alert">Bedankt voor je tijd, verstuurd!</div>
     </transition>
   </div>
 </template>
@@ -107,6 +97,7 @@
 import { ref } from "vue";
 import { auth } from "../boot/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+
 // Reactive form data
 const formData = ref({
   naam: "",
@@ -183,7 +174,58 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
-/* Fade transition for alert */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  width: 100vw; /* Full viewport width */
+  padding: 1rem; /* Adjust padding as needed */
+}
+
+.form {
+  width: 100%;
+  max-width: 600px; /* Adjust max width as needed */
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.375rem;
+}
+
+.submit-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.375rem;
+  background-color: #1976d2; /* Tailwind CSS blue-600 */
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #2563eb; /* Tailwind CSS blue-700 */
+}
+
+.alert {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1976d2; /* Tailwind CSS blue-500 */
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;

@@ -32,7 +32,7 @@ const isVisible = ref(false);
 const router = useRouter();
 
 const startIntroJs = () => {
-  const intro = introJs().setOptions({
+  const intro = introJs.tour().setOptions({
     steps: [
       {
         element: "#bedrijven-registratie-link",

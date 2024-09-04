@@ -149,7 +149,7 @@ export default {
       } catch (error) {
         console.error("Error signing in:", error);
         errorMessage.value =
-          "Failed to sign in. Please check your email and password and try again.";
+          "Inloggen is mislukt. Controleer je e-mail en wachtwoord en probeer het opnieuw.";
       }
     };
 
