@@ -1,8 +1,8 @@
 {
-  "name": "arbeidsbeperkt",
+  "name": "Stichting Arbeidsbeperkt",
   "version": "0.0.1",
-  "description": "An Arbeidsbeperkt.nl Project",
-  "productName": "arbeidsbeperkt",
+  "description": "Wij zijn Stichting Arbeidsbeperkt, een non-profit organisatie dat arbeidsbeperkten en bedrijven samenbrengt",
+  "productName": "Stichting Arbeidsbeperkt",
   "author": "FurkanAndac <furkan_andac_@hotmail.com>",
   "private": true,
   "scripts": {
