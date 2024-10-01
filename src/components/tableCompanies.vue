@@ -183,7 +183,14 @@
                 >{{ selectedItem.formData.telefoonnummer }}</a
               >
             </span>
-            <span v-else> 📞 Verborgen </span>
+            <span v-else>
+              📞
+              <router-link
+                to="/authentication/login"
+                class="text-blue-500 hover:underline"
+                >Login om te zien</router-link
+              >
+            </span>
           </p>
           <p>
             <strong>E-mail:</strong>
@@ -194,7 +201,14 @@
                 >{{ selectedItem.formData.email }}</a
               >
             </span>
-            <span v-else> ✉️ Verborgen </span>
+            <span v-else>
+              📞
+              <router-link
+                to="/authentication/login"
+                class="text-blue-500 hover:underline"
+                >Login om te zien</router-link
+              >
+            </span>
           </p>
           <p>
             <strong>Provincie:</strong> {{ selectedItem.formData.provincie }}
